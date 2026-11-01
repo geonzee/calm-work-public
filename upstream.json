@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/super-productivity/super-productivity.git",
+  "tag": "v19.2.0",
+  "commit": "466a426700e7402f8628bc80ce499d3de6160dbb",
+  "license": "MIT",
+  "reviewedAt": "2026-10-13",
+  "strategy": "Thin fork retaining Angular, NgRx, Electron, Capacitor and the upstream operation-log sync engine",
+  "scaffoldStatus": "Upstream is fetched at build time and is not vendored. The tracked overlay is applied onto the pin."
+}

@@ -1,0 +1,5 @@
+# Operator supplies the real domain and runs Caddy on the host.
+# Access logging is intentionally not enabled: callback URLs/capabilities must not be logged.
+{$CALM_DOMAIN} {
+  reverse_proxy 127.0.0.1:4242
+}

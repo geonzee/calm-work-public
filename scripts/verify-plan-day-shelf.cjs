@@ -1,0 +1,135 @@
+const {chromium} = require('../output/upstream/node_modules/@playwright/test');
+const assert = require('node:assert/strict');
+const path = require('node:path');
+(async () => {
+ const browser = await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
+ try {
+ const page = await browser.newPage({viewport:{width:1440,height:900}});
+ const errors=[]; page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('file://'+path.resolve(__dirname,'../apps/desktop/ui/keyboard-review.html'));
+ await page.evaluate(()=>{
+ window.calmRuntimeMode=true; window.calmReference=false; window.calmProviderEvents={};
+ state.active=null; state.sessions=[]; state.liveSession=null; state.showSleepHours=false;
+ state.calendarMode='day'; state.calendarSlot.day=0;
+ tasks.splice(0,tasks.length,{id:'pending',title:'Choose a time',date:calmToday(),schedule:'',estimate:30,done:false}, {id:'timed',title:'Timed work',date:calmToday(),schedule:'10:00',estimate:60,done:false});
+ state.localEvents=[{id:'all',title:'Holiday',date:calmToday(),start:'00:00',end:'24:00',allDay:true},{id:'night',title:'Night call',date:calmToday(),start:'03:00',end:'04:00',owned:true},{id:'conflict',title:'Real conflict',date:calmToday(),start:'10:30',end:'11:30',owned:true}];
+ show('plan');
+ });
+ await page.evaluate(() => {
+   document.querySelector('.calendar-wrap').dataset.stay = '1';
+   const input = document.querySelector('#task-filter');
+   input.value = 'zzzz-no-task';
+   input.dispatchEvent(new Event('input', { bubbles: true }));
+ });
+ assert.equal(await page.locator('.calendar-wrap').getAttribute('data-stay'), '1');
+ assert.equal(await page.locator('.plan-tasks [data-row]').count(), 0);
+ await page.evaluate(() => {
+   const input = document.querySelector('#task-filter');
+   input.value = '';
+   input.dispatchEvent(new Event('input', { bubbles: true }));
+ });
+ assert.equal(await page.locator('.day-shelf [data-event="all"]').count(),1);
+ assert.equal(await page.locator('.calendar-block[data-event="all"]').count(),0);
+ assert.equal(await page.locator('.day-shelf [data-calendar-task="pending"]').count(),1);
+ assert.equal(await page.locator('.calendar-block[data-event="night"]').count(),0);
+ assert.match(await page.locator('[data-sleep-item]').textContent(),/03:00.*Night call/);
+ assert.equal(await page.locator('#toggle-sleep .sleep-alert').innerText(), '1');
+ assert.match(await page.locator('#toggle-sleep').getAttribute('aria-label'), /1 item is between 00:00 and 08:00/);
+ assert.equal(await page.locator('.time-axis span').first().innerText(), '08:00');
+ assert.match(await page.locator('.calendar-conflict-notice').textContent(),/1 overlap/);
+ assert.equal(await page.evaluate(()=>calendarMinuteAt(calendarY(600))),600);
+ assert.equal(await page.evaluate(()=>calendarY(480)===calendarY(0)),true);
+ await page.locator('[data-sleep-item]').click();
+ assert.equal(await page.locator('.calendar-block[data-event="night"]').count(),1);
+ await page.locator('#toggle-sleep').click();
+ // Shelf task supports the existing time editor as a click alternative to dragging.
+ await page.locator('.day-shelf [data-calendar-task="pending"]').click();
+ await page.locator('[name=schedule-time]').fill('12:00');
+ const save = page.locator('#drawer-save');
+ if(await save.count()) await save.click();
+ assert.equal(await page.evaluate(()=>getTask('pending').schedule),'12:00');
+ await page.keyboard.press('Escape');
+ await page.locator('.day-shelf').evaluate(shelf=>{
+   const transfer = new DataTransfer(); transfer.setData('text/plain','timed');
+   shelf.dispatchEvent(new DragEvent('drop',{bubbles:true,cancelable:true,dataTransfer:transfer}));
+ });
+ assert.equal(await page.evaluate(()=>getTask('timed').schedule),'');
+ assert.equal(await page.locator('.day-shelf [data-calendar-task="timed"]').count(),1);
+ await page.screenshot({path:'output/calendar-usability/day-shelf-desktop.png'});
+ await page.setViewportSize({width:390,height:844});
+ await page.evaluate(()=>{state.showPlanTasks=false;renderScreen();});
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+ assert.deepEqual(errors,[]);
+ await page.screenshot({path:'output/calendar-usability/day-shelf-phone.png'});
+ await page.evaluate(() => {
+   state.localEvents.push({id:'call', title:'Supplier call', date:calmToday(), start:'11:00', end:'11:45', owned:true, meetingUrl:'https://example.test/call', notes:'Line one.\n\nhttps://example.test/notes'});
+   for (let i = 0; i < 4; i++) state.localEvents.push({id:'extra'+i, title:'Extra all day '+i, date:calmToday(), start:'00:00', end:'24:00', allDay:true, owned:true});
+   tasks.push({id:'old', title:'Finish yesterday', project:'Personal', date:calmDateAfter(-1), schedule:'09:00', estimate:30, done:false});
+   tasks.push({id:'done-today', title:'Already done', project:'Personal', date:calmToday(), estimate:15, schedule:'', done:true});
+   tasks.push({id:'future', title:'Next week', project:'Personal', date:calmDateAfter(3), estimate:20, schedule:'', done:false});
+   renderScreen();
+ });
+ assert.equal(await page.locator('.day-shelf .day-chip.event').count(), 2);
+ assert.match(await page.locator('.day-more').innerText(), /\+3 more/);
+ await page.locator('.day-more').click();
+ assert.match(await page.locator('#day-overflow').innerText(), /Extra all day 3/);
+ await page.locator('#day-overflow [data-close-overflow]').click();
+ await page.evaluate(() => show('track'));
+ assert.equal(await page.locator('details.past-tasks[open] [data-row="old"]').count(), 1);
+ assert.equal(await page.locator('details.later-tasks summary small').count(), 0);
+ assert.equal(await page.locator('details.done-today summary small').count(), 0);
+ assert.match(await page.locator('.list-count').innerText(), /remaining/);
+ assert.equal(await page.locator('.today-queue .event-row').count(), 0);
+ assert.deepEqual(await page.locator('#navigation .nav-label').evaluateAll((nodes) => nodes.slice(0, 3).map((node) => node.textContent)), ['Track', 'Plan', 'Clean']);
+ await page.evaluate(() => openEvent('call'));
+ assert.equal(await page.locator('.meeting-link').getAttribute('href'), 'https://example.test/call');
+ assert.match(await page.locator('#event-notes').inputValue(), /example\.test\/notes/);
+ assert.equal(await page.locator('.notes-read').count(), 0);
+ await page.locator('#close-drawer').click();
+ await page.evaluate(() => {
+   window.calmProviderEvents = { meet: { id: 'meet', title: 'Design', date: calmToday(), start: '15:00', end: '15:30', owned: false, editable: false, meetingUrl: '', location: 'https://meet.google.com/abc-defg-hij', notes: 'Join with Google Meet\nhttps://meet.google.com/abc-defg-hij\n\nBring the brief.' } };
+   openEvent('meet');
+ });
+ assert.equal(await page.locator('.meeting-link').getAttribute('href'), 'https://meet.google.com/abc-defg-hij');
+ assert.match(await page.locator('.notes-read').innerText(), /Bring the brief/);
+ assert.equal((await page.locator('.notes-read').innerText()).includes('meet.google.com'), false);
+ await page.locator('#close-drawer').click();
+ const original = 'Join with Google Meet\nhttps://meet.google.com/abc-defg-hij\n\nBring the brief.';
+ const url = 'https://meet.google.com/abc-defg-hij';
+ assert.equal(await page.evaluate(({ original, url }) => notesForSave('Bring the brief.', original, url), { original, url }), original);
+ assert.equal(await page.evaluate(({ url }) => notesForSave('Bring the revised brief', 'Bring the brief', url), { url }), 'Bring the revised brief\n\n' + url);
+ assert.equal(await page.evaluate(() => eventMeetingUrl({ notes: 'Talk through https://calls.acme.test/room/42 and then decide.' })), 'https://calls.acme.test/room/42');
+ assert.equal(await page.evaluate(() => eventMeetingUrl({ notes: 'Spec https://docs.google.com/document/d/1 and https://github.com/acme/spec' })), '');
+ assert.equal(await page.evaluate(() => eventMeetingUrl({ notes: 'Join the room\nhttps://calls.acme.test/room/9\nAlso see https://docs.google.com/document/d/1' })), 'https://calls.acme.test/room/9');
+ await page.evaluate(() => {
+   window.calmProviderEvents.privateCall = { id: 'privateCall', title: 'Board', date: calmToday(), start: '16:00', end: '16:30', owned: false, editable: false, meetingUrl: '', notes: 'Talk through https://calls.acme.test/room/42 and then decide.' };
+   openEvent('privateCall');
+ });
+ assert.equal(await page.locator('.meeting-link').getAttribute('href'), 'https://calls.acme.test/room/42');
+ assert.match(await page.locator('.notes-read').innerText(), /Talk through/);
+ assert.equal((await page.locator('.notes-read').innerText()).includes('calls.acme.test'), false);
+ await page.locator('#close-drawer').click();
+ await page.evaluate(() => {
+   state.localEvents.push({ id: 'keep', title: 'Keep link', date: calmToday(), start: '17:00', end: '17:30', owned: true, meetingUrl: 'https://calls.acme.test/room/7', notes: 'Bring the deck\n\nhttps://calls.acme.test/room/7' });
+   openEvent('keep');
+ });
+ assert.equal((await page.locator('#event-notes').inputValue()).includes('calls.acme.test'), false);
+ await page.locator('#drawer-save').click();
+ assert.equal(await page.evaluate(() => state.localEvents.find((event) => event.id === 'keep').notes), 'Bring the deck\n\nhttps://calls.acme.test/room/7');
+ await page.evaluate(() => openEvent('keep'));
+ await page.locator('#event-notes').fill('Bring the revised deck');
+ await page.locator('#drawer-save').click();
+ assert.equal(await page.evaluate(() => state.localEvents.find((event) => event.id === 'keep').notes), 'Bring the revised deck\n\nhttps://calls.acme.test/room/7');
+ await page.evaluate(() => openEvent('call'));
+ await page.locator('[name=event-actual-end]').fill('12:10');
+ await page.locator('#drawer-save').click();
+ assert.equal(await page.evaluate(() => dayBlocks(calmDayIndex(calmToday())).find((block) => block.id === 'call')?.end), 12 * 60 + 10);
+ await page.evaluate(() => openEvent('call'));
+ assert.equal(await page.locator('.detail-drawer').evaluate((el) => getComputedStyle(el).position), 'fixed');
+ await page.evaluate(() => show('inbox'));
+ assert.equal(await page.locator('#screen-title').innerText(), 'Clean');
+ assert.equal(await page.locator('#screen .event-row[data-event="call"]').count(), 1);
+ assert.deepEqual(errors, []);
+ console.log('PASS: all-day separation, dated task shelf, hidden overnight disclosure, real conflict count, coordinate inversion, editor access, phone containment, compact shelf, past queue, event length and Clean');
+ } finally {await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1});

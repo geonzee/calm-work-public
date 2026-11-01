@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>Calm Work · keyboard-first review</title>
+    <link rel="stylesheet" href="keyboard-review.css" />
+  </head>
+  <body>
+    <header class="review-toolbar">
+      <strong>Calm Work</strong
+      ><label
+        >View / state
+        <select id="review-picker" aria-label="Review view"></select></label
+      ><small>Synthetic preview · all modules shown for review</small>
+    </header>
+    <div class="app" id="app" data-surface="desktop">
+      <aside class="nav-rail" id="nav">
+        <div class="brand">
+          <span class="brand-mark"></span><span>calm work</span>
+        </div>
+        <nav id="navigation" aria-label="Workspace"></nav>
+        <button
+          class="nav-item nav-bottom"
+          data-show="modules"
+          aria-label="Settings"
+          title="Settings"
+        >
+          <span data-icon="settings"></span
+          ><span class="nav-label">Settings</span>
+        </button>
+      </aside>
+      <div class="workspace">
+        <header class="app-header">
+          <div class="header-left">
+            <button
+              class="icon-btn"
+              id="collapse-nav"
+              aria-label="Collapse navigation"
+              aria-expanded="true"
+              data-icon="sidebar"
+            ></button>
+            <button class="icon-btn" id="nav-back" aria-label="Back" title="Back (Alt+Left)" data-icon="back" hidden></button>
+            <h1 id="screen-title">Track</h1>
+          </div>
+          <div id="global-tracker" class="global-tracker" hidden></div>
+          <div class="header-right">
+            <button
+              class="icon-btn"
+              id="shortcut-help"
+              aria-label="Keyboard shortcuts"
+              title="Keyboard shortcuts (?)" hidden
+              data-icon="keyboard"
+            ></button
+            ><button
+              class="icon-btn global-plus"
+              id="global-add"
+              aria-label="Add task"
+              title="Add task (Shift+A)"
+              data-icon="plus"
+            ></button>
+          </div>
+        </header>
+        <div class="workspace-body">
+          <main id="screen" tabindex="-1"></main>
+          <aside
+            class="detail-drawer"
+            id="drawer"
+            hidden
+            aria-label="Detail sidebar"
+          >
+            <header>
+              <h2 id="drawer-heading"></h2>
+              <button class="primary small-button" id="drawer-save" hidden>
+                Save edits
+              </button>
+              <button
+                class="icon-btn"
+                id="close-drawer"
+                aria-label="Close details" title="Close details (Esc)"
+                data-icon="close"
+              ></button>
+            </header>
+            <section
+              id="drawer-discard"
+              class="drawer-discard"
+              hidden
+              aria-label="Unsaved changes"
+            >
+              <p>Discard unsaved changes?</p>
+              <button class="quiet" id="keep-editing" type="button">
+                Keep editing
+              </button>
+              <button
+                class="quiet danger-text"
+                id="discard-edits"
+                type="button"
+              >
+                Discard changes
+              </button>
+            </section>
+            <div id="drawer-content"></div>
+          </aside>
+        </div>
+        <footer class="key-hints" id="key-hints"></footer>
+        <p class="rotate-hint" id="rotate-hint">Turn the phone upright.</p>
+        <nav class="mobile-nav" id="mobile-nav">
+          <button id="phone-add" type="button" aria-label="Add task">
+            <span data-icon="plus"></span><span>Add</span>
+          </button>
+          <button
+            id="mobile-more"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            aria-haspopup="menu"
+          >
+            Menu
+          </button>
+          <div
+            id="mobile-menu"
+            class="mobile-menu"
+            role="menu"
+            aria-label="Pages"
+            hidden
+          >
+            <button role="menuitem" data-show="track">Track</button>
+            <button role="menuitem" data-show="inbox">Clean</button>
+            <button role="menuitem" data-show="plan">Plan</button>
+            <button role="menuitem" data-show="projects">Projects</button>
+            <button role="menuitem" data-show="reports">Reports</button>
+            <button role="menuitem" data-show="modules">Settings</button>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="overlay" id="add-overlay" hidden>
+      <section
+        class="add-bar"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Add task"
+      >
+        <form id="add-form">
+          <div class="add-title">
+            <div class="add-input-wrap">
+              <div class="add-ghost" id="add-ghost" aria-hidden="true"></div>
+              <input
+                id="add-title"
+                aria-label="Task title and shortcuts"
+                placeholder="A task title +project @16:00 t25m"
+                autocomplete="off"
+                enterkeyhint="done"
+              />
+            </div>
+            <button
+              class="icon-btn"
+              type="button"
+              id="close-add"
+              aria-label="Close task bar"
+              data-icon="close"
+            ></button>
+          </div>
+          <div class="add-quick" id="add-quick" hidden></div>
+          <div class="add-properties">
+            <button type="button" data-add-field="project">
+              <span data-icon="folder"></span
+              ><span id="add-project-label">Project</span></button
+            ><button type="button" data-add-field="schedule">
+              <span data-icon="calendar"></span
+              ><span id="add-schedule-label">Schedule</span></button
+            ><button type="button" data-add-field="estimate">
+              <span data-icon="clock"></span
+              ><span id="add-estimate-label">Estimate</span></button
+            ><button type="button" data-add-field="repeat">
+              <span data-icon="repeat"></span
+              ><span id="add-repeat-label">Repeat</span></button
+            ><button class="add-submit" type="submit">Add<span class="add-submit-noun"> task</span> <kbd>↵</kbd></button>
+          </div>
+          <div id="add-field" hidden></div>
+          <button
+            type="button"
+            class="completion-hint"
+            id="accept-completion"
+            hidden
+          ></button>
+          <div class="syntax-preview" id="syntax-preview">
+            +launch → project &nbsp; @16:00 → schedule &nbsp; t25m → estimate
+            &nbsp; @every friday → repeat
+          </div>
+        </form>
+      </section>
+    </div>
+    <div class="overlay" id="help-overlay" hidden>
+      <section
+        class="help-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Keyboard shortcuts"
+      >
+        <header>
+          <h2>Keyboard shortcuts</h2>
+          <button
+            class="icon-btn"
+            id="close-help"
+            aria-label="Close shortcuts"
+            data-icon="close"
+          ></button>
+        </header>
+        <div id="help-content"></div>
+      </section>
+    </div>
+    <div class="overlay" id="time-overlay" hidden>
+      <section
+        class="time-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="time-overlay-title"
+      >
+        <h2 id="time-overlay-title">Add a time</h2>
+        <p>This task needs recorded time or an estimate.</p>
+        <label class="field"
+          ><span>Estimate (minutes)</span
+          ><input
+            id="time-overlay-minutes"
+            type="number"
+            inputmode="decimal"
+            min="1"
+            max="100000"
+            step="any"
+          /></label>
+        <div class="actions">
+          <button class="primary" type="button" id="time-overlay-save">
+            Save estimate
+          </button>
+          <button class="quiet" type="button" id="time-overlay-cancel">
+            Cancel
+          </button>
+        </div>
+      </section>
+    </div>
+    <div class="toast" id="toast" role="status" hidden></div>
+    <script src="keyboard-date.js"></script>
+    <script src="keyboard-calendar.js"></script>
+    <script src="keyboard-prototypes.js"></script>
+    <script src="keyboard-review.js"></script>
+  </body>
+</html>

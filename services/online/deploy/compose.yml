@@ -1,0 +1,25 @@
+# Local booking, polls, and shared projects. Published on 127.0.0.1 only.
+# This file has no hostname. Do not publish 0.0.0.0 or attach an existing volume.
+services:
+  online:
+    build:
+      context: ../../..
+      dockerfile: services/online/Dockerfile
+    env_file: ../.env
+    environment:
+      CALM_ONLINE_HOST: 0.0.0.0
+      CALM_ONLINE_PORT: 4242
+      CALM_ONLINE_DATABASE_URL: file:/data/calendar.db
+      CALM_PROVIDER_VAULT_FILE: /data/provider-vault
+    ports:
+      - "127.0.0.1:4242:4242"
+    volumes:
+      - calm-online-data:/data
+    restart: unless-stopped
+    init: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  calm-online-data:

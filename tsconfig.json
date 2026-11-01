@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "declaration": true,
+    "rootDir": ".",
+    "outDir": "output/build",
+    "skipLibCheck": true
+  },
+  "include": ["packages/**/*.ts", "apps/**/*.ts", "services/**/*.ts"],
+  "exclude": ["apps/desktop/calm-shell/**/*.ts", "apps/desktop/native/**/*.ts"]
+}

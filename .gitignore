@@ -1,0 +1,51 @@
+# Local and machine files
+.local/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.local.md
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Secrets
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Databases and logs
+*.sqlite
+*.sqlite3
+*.db
+*.log
+
+# Dependencies and caches
+node_modules/
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Binary documents, restricted, raw, and throwaway folders (any depth)
+files/
+private/
+raw/
+exports/
+scratch/
+tmp/
+output/
+
+# Large media and archives
+*.mp4
+*.mov
+*.zip
+*.7z
+*.tar.gz
+*.xpi
+
+# Mail profiles and message exports
+profiles/
+evaluation-private/
+*.eml
+key4.db
+logins.json

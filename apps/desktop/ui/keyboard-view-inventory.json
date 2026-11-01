@@ -1,0 +1,354 @@
+[
+  {
+    "key": "track",
+    "title": "Track",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "inbox",
+    "title": "Inbox",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "new-task",
+    "title": "Global add bar",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "add bar"
+  },
+  {
+    "key": "task",
+    "title": "Task details",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "sidebar"
+  },
+  {
+    "key": "today",
+    "title": "Track \u00b7 Today queue",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "plan",
+    "title": "Plan / calendar",
+    "source": "Morgen",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "history",
+    "title": "Reports \u00b7 time entries",
+    "source": "Super Productivity + original session view",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "session",
+    "title": "Reports \u00b7 edit time entry",
+    "source": "Super Productivity + original session view",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "inline editor"
+  },
+  {
+    "key": "projects",
+    "title": "Projects",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "project",
+    "title": "Project detail",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "reports",
+    "title": "Reports / export",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "export",
+    "title": "Report export sidebar",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "sidebar"
+  },
+  {
+    "key": "bookings",
+    "title": "Booking types",
+    "source": "Cal.com",
+    "surface": "desktop",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "booking-edit",
+    "title": "Booking editor / availability",
+    "source": "Cal.com",
+    "surface": "desktop",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "public-booking",
+    "title": "Public booking page",
+    "source": "Cal.com",
+    "surface": "public",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "booking-attendee",
+    "title": "Booking attendee details",
+    "source": "Cal.com",
+    "surface": "public",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "booking-confirmed",
+    "title": "Booking confirmation",
+    "source": "Cal.com",
+    "surface": "public",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "booking-manage",
+    "title": "Booking management / cancellation",
+    "source": "Cal.com",
+    "surface": "desktop",
+    "group": "Scheduling",
+    "mode": "sidebar"
+  },
+  {
+    "key": "polls",
+    "title": "Group polls",
+    "source": "Rallly",
+    "surface": "desktop",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "poll-edit",
+    "title": "Poll editor",
+    "source": "Rallly",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "public-poll",
+    "title": "Public poll / participant vote",
+    "source": "Rallly",
+    "surface": "public",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "poll-results",
+    "title": "Poll results / finalize",
+    "source": "Rallly",
+    "surface": "desktop",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "team",
+    "title": "Team \u00b7 on hold",
+    "source": "Super Productivity + original team view",
+    "surface": "desktop",
+    "group": "Team",
+    "mode": "main view"
+  },
+  {
+    "key": "modules",
+    "title": "Settings / feature modules",
+    "source": "Original modular settings",
+    "surface": "desktop",
+    "group": "Settings",
+    "mode": "main view"
+  },
+  {
+    "key": "calendars",
+    "title": "Calendar connections / permissions",
+    "source": "Google + Microsoft OAuth",
+    "surface": "desktop",
+    "group": "Settings",
+    "mode": "main view"
+  },
+  {
+    "key": "sync",
+    "title": "Sync / backup / recovery",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Settings",
+    "mode": "main view"
+  },
+  {
+    "key": "ai",
+    "title": "AI control / local access",
+    "source": "Super Productivity local API",
+    "surface": "desktop",
+    "group": "Settings",
+    "mode": "main view"
+  },
+  {
+    "key": "tray",
+    "title": "Menu bar panel",
+    "source": "Super Productivity tracking + original compact view",
+    "surface": "tray",
+    "group": "Platforms",
+    "mode": "main view"
+  },
+  {
+    "key": "mobile",
+    "title": "Mobile tasks / tracking",
+    "source": "Super Productivity",
+    "surface": "mobile",
+    "group": "Platforms",
+    "mode": "main view"
+  },
+  {
+    "key": "mobile-task",
+    "title": "Mobile task sidebar",
+    "source": "Super Productivity",
+    "surface": "mobile",
+    "group": "Platforms",
+    "mode": "sidebar"
+  },
+  {
+    "key": "booking-availability",
+    "title": "Booking availability",
+    "source": "Cal.com",
+    "surface": "desktop",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "booking-rules",
+    "title": "Booking rules / calendars",
+    "source": "Cal.com",
+    "surface": "desktop",
+    "group": "Scheduling",
+    "mode": "sidebar"
+  },
+  {
+    "key": "booking-questions",
+    "title": "Booking questions",
+    "source": "Cal.com",
+    "surface": "desktop",
+    "group": "Scheduling",
+    "mode": "sidebar"
+  },
+  {
+    "key": "task-options",
+    "title": "Task details \u00b7 notes",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "sidebar"
+  },
+  {
+    "key": "project-board",
+    "title": "Project board",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "main view"
+  },
+  {
+    "key": "project-notes",
+    "title": "Project notes",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "sidebar"
+  },
+  {
+    "key": "project-settings",
+    "title": "Project settings",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "sidebar"
+  },
+  {
+    "key": "restore",
+    "title": "Restore backup",
+    "source": "Super Productivity",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "sidebar"
+  },
+  {
+    "key": "poll-finalized",
+    "title": "Poll finalized",
+    "source": "Rallly",
+    "surface": "desktop",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "public-booking-manage",
+    "title": "Guest booking management",
+    "source": "Cal.com",
+    "surface": "public",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "public-poll-saved",
+    "title": "Participant response confirmation",
+    "source": "Rallly",
+    "surface": "public",
+    "group": "Scheduling",
+    "mode": "main view"
+  },
+  {
+    "key": "calendar-new-task",
+    "title": "Calendar \u00b7 new task",
+    "source": "Morgen",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "sidebar"
+  },
+  {
+    "key": "calendar-new-event",
+    "title": "Calendar \u00b7 new event",
+    "source": "Morgen",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "sidebar"
+  },
+  {
+    "key": "calendar-event",
+    "title": "Calendar \u00b7 event details",
+    "source": "Morgen",
+    "surface": "desktop",
+    "group": "Personal",
+    "mode": "sidebar"
+  }
+]

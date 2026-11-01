@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  height: 100dvh;
+  box-sizing: border-box;
+  // Phone Home Screen app: keep the renderer clear of the notch, the home bar and rounded corners.
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0)
+    env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+  background: #101010;
+}
+.review-renderer {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.runtime-error {
+  position: fixed;
+  bottom: var(--s2);
+  left: var(--s2);
+  right: var(--s2);
+  padding: var(--s2);
+  margin: 0;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--color-warning);
+  z-index: var(--z-backdrop);
+}
+
+// Own the touch viewport independently of the upstream page's flex sizing.
+@media (pointer: coarse) {
+  :host {
+    position: fixed;
+    inset: 0 0 auto;
+    width: 100%;
+    overflow: hidden;
+  }
+  :host([data-keyboard="true"]) { padding-bottom: 0; }
+}

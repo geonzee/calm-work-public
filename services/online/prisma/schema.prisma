@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "../../../output/online-client"
+}
+datasource db {
+  provider = "sqlite"
+  url = env("CALM_ONLINE_DATABASE_URL")
+}
+// Version-checked transactions serialize each publication/workspace across workers.
+// Personal task storage and SuperSync are deliberately not part of this database.
+model Resource {
+  id String @id
+  kind String
+  revision Int @default(0)
+  value String
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,32 @@
+const {chromium}=require('../output/upstream/node_modules/@playwright/test');
+const assert=require('node:assert/strict');const path=require('node:path');const fs=require('node:fs');
+(async()=>{const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});try{
+ const page=await browser.newPage({viewport:{width:1280,height:850}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('file://'+path.resolve(__dirname,'../apps/desktop/ui/keyboard-review.html')+'?reference=1');
+ await page.locator('#global-add').click();await page.locator('#add-title').fill('Synthetic capture @today @10:30 t25m');
+ await page.locator('[data-add-field="schedule"]').click();
+ for(const day of ['today','tomorrow']){await page.locator(`[data-add-day="${day}"]`).click();assert.equal(await page.evaluate(()=>parsedAdd().schedule),day);assert.equal(await page.evaluate(()=>parsedAdd().time),'10:30');}
+ const next=await page.evaluate(()=>calmMonday());await page.locator(`[data-add-day="${next}"]`).click();
+ assert.equal(await page.locator('#add-calendar-date').inputValue(),next);
+ await page.locator('#add-calendar-date').fill('2026-11-12');await page.locator('#add-calendar-date').dispatchEvent('change');
+ await page.locator('#add-calendar-time').fill('14:45');await page.locator('#add-calendar-time').dispatchEvent('change');
+ assert.equal(await page.evaluate(()=>parsedAdd().schedule),'2026-11-12');assert.equal(await page.evaluate(()=>parsedAdd().time),'14:45');
+ fs.mkdirSync('output/add-presets',{recursive:true});await page.screenshot({path:'output/add-presets/date.png'});
+ await page.locator('[data-add-day=""]').click();assert.equal(await page.evaluate(()=>parsedAdd().time),'');
+ await page.locator('[data-add-day="tomorrow"]').click();
+ await page.locator('#add-calendar-time').fill('09:15');await page.locator('#add-calendar-time').dispatchEvent('change');
+ await page.locator('[data-add-field="estimate"]').click();
+ assert.equal(await page.locator('[data-add-estimate]').count(),6);
+ await page.locator('#add-field-value').fill('-1');
+ await page.locator('[data-add-estimate="60"]').click();assert.equal(await page.evaluate(()=>parsedAdd().estimate),'60');
+ assert.equal(await page.locator('#add-form').evaluate(el=>el.checkValidity()),true);
+ assert.equal(await page.evaluate(()=>document.activeElement.id),'add-title');
+ await page.locator('[data-add-field="estimate"]').click();await page.screenshot({path:'output/add-presets/estimate.png'});
+ await page.locator('#add-field-value').fill('12.5');await page.locator('#add-field-value').press('Enter');
+ await page.locator('.add-submit').click();
+ const task=await page.evaluate(()=>tasks.find(t=>t.title==='Synthetic capture'));
+ assert.equal(task.date,await page.evaluate(()=>calmTomorrow()));assert.equal(task.schedule,'09:15');assert.equal(task.estimate,12.5);
+ await page.locator('#global-add').click();await page.locator('#add-title').fill('No estimate task');await page.locator('[data-add-field="estimate"]').click();await page.locator('[data-add-estimate=""]').click();
+ await page.locator('.add-submit').click();assert.equal(await page.evaluate(()=>tasks.find(t=>t.title==='No estimate task').estimate),null);
+ assert.deepEqual(errors,[]);console.log('PASS: desktop Today/Tomorrow/Next week/calendar/time, date-time preservation, clearing, estimate presets, invalid-value recovery, fractional custom estimate, focus and submitted task data.');
+}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

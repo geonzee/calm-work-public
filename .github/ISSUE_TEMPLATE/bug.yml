@@ -1,0 +1,17 @@
+name: Bug
+description: Something in Calm Work behaves wrongly
+body:
+  - type: textarea
+    attributes:
+      label: What happened
+      description: Synthetic steps only. Do not paste sync codes, tokens, or tasks from a real profile.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Version or commit
