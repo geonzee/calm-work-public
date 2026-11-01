@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Install (or update) a fixed copy of the current core build outside the checkout.
 # Rebuilding the checkout never changes the installed app; run this again to update.
-#   ~/.local/opt/calm-work/releases/<stamp>/  installed app copies
-#   ~/.local/opt/calm-work/current            symlink to the active release
-#   ~/.local/share/calm-work                  live profile (never touched here)
+#   ~/.local/opt/calm-work-public/releases/<stamp>/  installed app copies
+#   ~/.local/opt/calm-work-public/current            symlink to the active release
+#   ~/.local/share/calm-work-public                  live profile (never touched here)
 set -euo pipefail
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 build="$project_dir/output/upstream/.tmp/app-builds/linux-unpacked"
-prefix="${CALM_WORK_PREFIX:-$HOME/.local/opt/calm-work}"
+prefix="${CALM_WORK_PREFIX:-$HOME/.local/opt/calm-work-public}"
 keep="${CALM_WORK_KEEP_RELEASES:-3}"
 if [[ -e "$prefix/current" && "${CALM_WORK_REPLACE_DAILY:-}" != 1 ]]; then
   echo "An install already exists at $prefix/current." >&2
@@ -15,7 +15,7 @@ if [[ -e "$prefix/current" && "${CALM_WORK_REPLACE_DAILY:-}" != 1 ]]; then
   exit 1
 fi
 case "$prefix" in
-  "$HOME/.local/share/calm-work")
+  "$HOME/.local/share/calm-work"|"$HOME/.local/share/calm-work-public")
     echo "Refusing to use the profile directory as an install prefix." >&2
     exit 1
     ;;
@@ -44,7 +44,7 @@ done
 echo 'Restart Calm Work (tray Quit, then open it) to use the new version.'
 # The launcher must keep Electron on the system keyring; without it Hyprland
 # falls back to basic_text and calendar sign-ins cannot be stored.
-launcher="$HOME/.local/bin/calm-work"
+launcher="$HOME/.local/bin/calm-work-public"
 if [[ -f "$launcher" ]] && ! grep -q -- '--password-store=gnome-libsecret' "$launcher"; then
   echo "Warning: $launcher lacks --password-store=gnome-libsecret; re-run scripts/install-linux-launcher.py." >&2
 fi

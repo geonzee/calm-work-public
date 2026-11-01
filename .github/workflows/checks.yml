@@ -1,0 +1,27 @@
+name: Checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run verify
+      - run: node --test scripts/verify-public-isolation.cjs
+      - run: cp deploy/sync/.env.example deploy/sync/.env
+      - run: docker compose -f deploy/sync/compose.yml config --quiet
+        env:
+          POSTGRES_PASSWORD: synthetic-ci-password
+          JWT_SECRET: synthetic-ci-secret-at-least-32-characters
+      - run: npm ci --ignore-scripts
+        working-directory: services/online
+      - run: npm run db:generate
+        working-directory: services/online
+      - run: npm test
+        working-directory: services/online

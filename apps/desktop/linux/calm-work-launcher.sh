@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Calm Work launcher: installed copy + stable profile. Installed by scripts/install-linux-launcher.py.
 set -euo pipefail
-app="${CALM_WORK_APP:-$HOME/.local/opt/calm-work/current}/superproductivity"
-profile="${CALM_WORK_PROFILE:-$HOME/.local/share/calm-work}"
+app="${CALM_WORK_APP:-$HOME/.local/opt/calm-work-public/current}/superproductivity"
+profile="${CALM_WORK_PROFILE:-$HOME/.local/share/calm-work-public}"
 if [[ ! -x "$app" ]]; then
   notify-send -a "Calm Work" "Calm Work is not installed" "Run scripts/install-app.sh in the calm-work checkout." 2>/dev/null || true
   echo "Calm Work not installed at $app" >&2

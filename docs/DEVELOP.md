@@ -18,7 +18,7 @@ npm test
 
 `launch-core.sh` uses `output/core-profile`. That profile is disposable. Do not point a check at a profile you use every day.
 
-`scripts/install-app.sh` copies a finished Linux build to `~/.local/opt/calm-work/releases/` and points `current` at it. If `current` already exists, the script stops unless `CALM_WORK_REPLACE_DAILY=1`. It does not read or write `~/.local/share/calm-work`.
+`scripts/install-app.sh` copies a finished Linux build to `~/.local/opt/calm-work-public/releases/` and points `current` at it. If `current` already exists, the script stops unless `CALM_WORK_REPLACE_DAILY=1`. It does not read or write `~/.local/share/calm-work-public`.
 
 `scripts/install-linux-launcher.py` installs a user launcher, a desktop entry, and the icon. The launcher keeps `--password-store=gnome-libsecret`.
 
@@ -71,3 +71,5 @@ node --test scripts/verify-calendar-oauth.cjs scripts/verify-calendar-mirror.cjs
 ```
 
 Use synthetic tasks. A check that needs a live calendar or a live sync server must use an account and a server you created for that run.
+
+The public launcher is `calm-work-public`, with its own empty profile at `~/.local/share/calm-work-public`. It does not register the daily app’s URL handler. Do not set `CALM_WORK_PROFILE` or `CALM_WORK_APP` to a daily installation when evaluating this copy.

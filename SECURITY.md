@@ -4,7 +4,7 @@ Report a vulnerability through [GitHub private security advisories](https://gith
 
 ## What this repository can reach
 
-Nothing outside the machine where you run it.
+Network features can contact the calendar providers and sync or optional service endpoints you configure. The repository does not grant access to the maintainer’s accounts.
 
 - There is no hosting token, account id, or deploy command.
 - `scripts/stage-pwa.cjs` writes a local directory, `output/pwa-public`.
